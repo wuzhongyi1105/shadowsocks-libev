@@ -3,13 +3,10 @@
 #
 
 FROM alpine:edge
-MAINTAINER Tony.Shao <xiocode@gmail.com>
+MAINTAINER HyperApp <hyperappcloud@gmail.com>
 
 ARG SS_VER=3.0.5
 ARG SS_OBFS_VER=0.0.3
-
-ARG SS_URL=https://github.com/shadowsocks/shadowsocks-libev/archive/v$SS_VER.tar.gz
-ARG SS_OBFS_URL=https://github.com/shadowsocks/simple-obfs/archive/v$SS_OBFS_VER.tar.gz
 
 RUN set -ex && \
     apk add --no-cache --virtual .build-deps \
@@ -61,16 +58,26 @@ USER nobody
 
 ENV SERVER_ADDR 0.0.0.0
 ENV SERVER_PORT 8388
-ENV PASSWORD 1234567890
-ENV METHOD chacha20
-ENV TIMEOUT 3600
+ENV PASSWORD=
+ENV METHOD=
+ENV TIMEOUT 300
 ENV DNS_ADDR 8.8.8.8
 ENV DNS_ADDR_2 8.8.4.4
-ENV OBFS_OPTS obfs=http;obfs-host=www.bing.com
+ENV PLUGIN=
+ENV PLUGIN_OPTS=
+ENV CONFIG=
 
 EXPOSE $SERVER_PORT/tcp
 EXPOSE $SERVER_PORT/udp
 
-COPY ./docker-entrypoint.sh /
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN echo $CONFIG | base64 --decode > config.json
+CMD ss-server -c config.json \
+              -s $SERVER_ADDR \
+              -p $SERVER_PORT \
+              -k $PASSWORD \
+              -m $METHOD \
+              -t $TIMEOUT \
+              --plugin $PLUGIN \
+              --plugin-opts "${PLUGIN_OPTS}" \
+              --fast-open \
+              -u $OPTIONS
