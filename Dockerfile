@@ -54,12 +54,11 @@ RUN set -ex && \
     apk del .build-deps && \
     rm -rf /tmp/*
 
-USER nobody
 
 ENV SERVER_ADDR 0.0.0.0
 ENV SERVER_PORT 8388
 ENV PASSWORD=
-ENV METHOD=
+ENV METHOD chacha20
 ENV TIMEOUT 300
 ENV DNS_ADDR 8.8.8.8
 ENV DNS_ADDR_2 8.8.4.4
@@ -70,14 +69,18 @@ ENV CONFIG=
 EXPOSE $SERVER_PORT/tcp
 EXPOSE $SERVER_PORT/udp
 
-RUN echo $CONFIG | base64 --decode > config.json
-CMD ss-server -c config.json \
-              -s $SERVER_ADDR \
+#COPY config.json /etc/
+#RUN if [[ ! -z $CONFIG ]]; then echo $CONFIG | base64 -d > /etc/config.json; fi
+
+
+USER nobody
+CMD ss-server -s $SERVER_ADDR \
               -p $SERVER_PORT \
-              -k $PASSWORD \
-              -m $METHOD \
+              -k "$PASSWORD" \
+              -m "$METHOD" \
               -t $TIMEOUT \
-              --plugin $PLUGIN \
-              --plugin-opts "${PLUGIN_OPTS}" \
+	      -d "$DNS_ADDR" \
               --fast-open \
               -u $OPTIONS
+              #--plugin "${PLUGIN}" \
+              #--plugin-opts "${PLUGIN_OPTS}" \
