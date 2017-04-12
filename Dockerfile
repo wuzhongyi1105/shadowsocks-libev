@@ -73,13 +73,12 @@ EXPOSE $SERVER_PORT/udp
 #RUN if [[ ! -z $CONFIG ]]; then echo $CONFIG | base64 -d > /etc/config.json; fi
 
 
-USER nobody
 CMD ss-server -s $SERVER_ADDR \
               -p $SERVER_PORT \
               -k "$PASSWORD" \
               -m "$METHOD" \
               -t $TIMEOUT \
-	      -d "$DNS_ADDR" \
+              -d "$DNS_ADDR" \
               --fast-open \
               -u $OPTIONS
               #--plugin "${PLUGIN}" \
