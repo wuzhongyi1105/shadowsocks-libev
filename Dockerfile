@@ -1,11 +1,7 @@
-#
-# Dockerfile for shadowsocks-libev
-#
-
 FROM alpine:edge
 MAINTAINER HyperApp <hyperappcloud@gmail.com>
 
-ARG SS_VER=3.0.5
+ARG SS_VER=3.0.7
 ARG SS_OBFS_VER=0.0.3
 
 RUN set -ex && \
@@ -69,9 +65,6 @@ ENV CONFIG=
 EXPOSE $SERVER_PORT/tcp
 EXPOSE $SERVER_PORT/udp
 
-#COPY config.json /etc/
-#RUN if [[ ! -z $CONFIG ]]; then echo $CONFIG | base64 -d > /etc/config.json; fi
-
 
 CMD ss-server -s $SERVER_ADDR \
               -p $SERVER_PORT \
@@ -81,5 +74,3 @@ CMD ss-server -s $SERVER_ADDR \
               -d "$DNS_ADDR" \
               --fast-open \
               -u $OPTIONS
-              #--plugin "${PLUGIN}" \
-              #--plugin-opts "${PLUGIN_OPTS}" \
