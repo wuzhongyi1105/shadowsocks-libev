@@ -13,6 +13,7 @@ RUN set -ex && \
                                 build-base \
                                 curl \
                                 libev-dev \
+                                c-ares-dev \
                                 libtool \
                                 linux-headers \
                                 udns-dev \
