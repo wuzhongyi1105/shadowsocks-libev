@@ -14,6 +14,7 @@ RUN set -ex && \
                                 curl \
                                 libev-dev \
                                 c-ares-dev \
+                                udns-dev \
                                 libtool \
                                 linux-headers \
                                 libsodium-dev \
