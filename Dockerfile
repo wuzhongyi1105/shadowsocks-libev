@@ -5,7 +5,6 @@ ARG SS_VER=3.1.0
 ARG SS_OBFS_VER=0.0.3
 
 RUN set -ex && \
-    apk add --no-cache udns && \
     apk add --no-cache --virtual .build-deps \
                                 git \
                                 autoconf \
